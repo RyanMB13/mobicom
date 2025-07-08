@@ -12,20 +12,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.pesopal.ui.theme.PesoPalTheme
+import android.content.Intent
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var emailInput: EditText
+    private lateinit var passwordInput: EditText
+    private lateinit var loginBtn: Button
+    private lateinit var registerLink: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            PesoPalTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        setContentView(R.layout.activity_login)
+
+        // Bind views
+        emailInput = findViewById(R.id.emailInput)
+        passwordInput = findViewById(R.id.passwordInput)
+        loginBtn = findViewById(R.id.loginBtn)
+        registerLink = findViewById(R.id.registerLink)
+
+        // Login button logic
+        loginBtn.setOnClickListener {
+            val email = emailInput.text.toString()
+            val password = passwordInput.text.toString()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show()
+            } else {
+                // TODO: Replace this with real login logic (e.g., check from SQLite)
+                if (email == "admin@example.com" && password == "1234") {
+                    Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
+                    // Navigate to Dashboard or Overview Activity
+                    startActivity(Intent(this, OverviewActivity::class.java))
+                } else {
+                    Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        // Register text click
+        registerLink.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 }
